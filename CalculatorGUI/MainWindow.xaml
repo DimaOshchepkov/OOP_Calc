@@ -32,7 +32,7 @@
             Grid.Row="0"
             Grid.ColumnSpan="5"
             Margin="10,19,10,10"
-            TextAlignment="Right"
+            TextAlignment="Right" Text="0" TextChanged="TextBoxExpression_TextChanged"
          />
         <Button Click="Erase" Content="&lt;=" BorderThickness="4" Grid.Column="4" Grid.Row="1" FontSize="24"/>
         <Button Click="Add" Content="mod" BorderThickness="4" Grid.Column="4" Grid.Row="2" FontSize="24"/>

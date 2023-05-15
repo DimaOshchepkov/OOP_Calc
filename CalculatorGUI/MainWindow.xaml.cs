@@ -20,32 +20,32 @@ namespace CalculatorGUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<string> infix = new List<string>();
+        string ToExpression(List<string> infix)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var str in infix)
+                sb.Append(str);
+            return sb.ToString();
+        }
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
         private void AddFunc(object sender, RoutedEventArgs e)
         {
-            if (TextBoxExpression.Text == "0")
-                TextBoxExpression.Text = String.Empty;
-
-            TextBoxExpression.Text += (sender as Button).Content.ToString() + "(";
+            infix.Add((sender as Button).Content.ToString() + "(");
+            TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void Erase(object sender, RoutedEventArgs e)
         {
-            if (TextBoxExpression.Text != String.Empty)
-                TextBoxExpression.Text = TextBoxExpression.Text.Substring(0,
-                    TextBoxExpression.Text.Length - 1);
+            if (infix.Count == 0)
+                return;
 
-            if (TextBoxExpression.Text == String.Empty)
-                TextBoxExpression.Text = "0";
+            infix.RemoveAt(infix.Count - 1);
+            TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void AddBinOp(object sender, RoutedEventArgs e)
@@ -55,15 +55,14 @@ namespace CalculatorGUI
 
         private void Add(object sender, RoutedEventArgs e)
         {
-            if (TextBoxExpression.Text == "0")
-                TextBoxExpression.Text = String.Empty;
-
-            TextBoxExpression.Text += (sender as Button).Content.ToString();
+            infix.Add((sender as Button).Content.ToString());
+            TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void AddFact(object sender, RoutedEventArgs e)
         {
-            TextBoxExpression.Text += "!";
+            infix.Add("!");
+            TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void Calculate(object sender, RoutedEventArgs e)
@@ -83,17 +82,28 @@ namespace CalculatorGUI
 
         private void CE(object sender, RoutedEventArgs e)
         {
-
+            infix.Clear();
         }
 
         private void AddComma(object sender, RoutedEventArgs e)
         {
-            TextBoxExpression.Text += ",";
+            if (infix.Count != 0 && infix[infix.Count - 1] == ",")
+                return;
+
+            infix.Add(",");
+            TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void Reciprocal(object sender, RoutedEventArgs e)
         {
-            TextBoxExpression.Text += "1/";
+            infix.Add("1/");
+            TextBoxExpression.Text = ToExpression(infix);
+        }
+
+        private void TextBoxExpression_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (infix.Count == 0)
+                TextBoxExpression.Text = "0";
         }
     }
 }
