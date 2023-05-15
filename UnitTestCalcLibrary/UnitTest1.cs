@@ -79,5 +79,17 @@ namespace UnitTestCalcLibrary
                 Assert.AreEqual(Calc.DoOperation($"+{a} - (-{b})"), (+a - (-b)).ToString());
             }
         }
+
+        [TestMethod]
+        public void DoubleValue()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                double a = Math.Round(r.NextDouble() * 100, 2);
+                double b = Math.Round(r.NextDouble() * 100, 2);
+
+                Assert.AreEqual(Calc.DoOperation($"{a} - {b}"), (a - b).ToString());
+            }
+        }
     }
 }
