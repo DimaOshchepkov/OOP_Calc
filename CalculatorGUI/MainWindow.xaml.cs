@@ -100,6 +100,7 @@ namespace CalculatorGUI
             TextBoxExpression.Text = ToExpression(infix);
         }
 
+
         private void TextBoxExpression_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (infix.Count == 0)
