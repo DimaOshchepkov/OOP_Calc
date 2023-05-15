@@ -13,26 +13,17 @@ namespace CalcLibrary
     {
         static int GetPrecedence(string op)
         {
-            switch (op)
-            {
-                case "+":
-                case "-":
-                    return 1;
-                case "*":
-                case "/":
-                    return 2;
-                case "cos":
-                case "sin":
-                case "tan":
-                case "sqrt":
-                case "#-":
-                case "#+":
-                    return 3;
-                case "^":
-                    return 4;
-                default:
-                    return 0;
-            }
+            if ("+" == op || "-" == op)
+                return 1;
+            else if ("*" == op || "/" == op)
+                return 2;
+            else if ("cos" == op || "sin" == op || "tan" == op || "sqrt" == op ||
+                    "#-" == op || "#+" == op)
+                return 3;
+            else if ("^" == op)
+                return 4;
+            else
+                return 0;
         }
 
         static bool IsOperator(string token)
