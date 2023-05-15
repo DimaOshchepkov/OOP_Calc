@@ -27,15 +27,57 @@ namespace UnitTestCalcLibrary
         [TestMethod]
         public void OperationPriory()
         {
-            Assert.AreEqual(Calc.DoOperation("2 + 2*2"), "6");
-            Assert.AreEqual(Calc.DoOperation("4*2^4"), "64");
+            for (int i = 0; i < 100; i++)
+            {
+                int a = r.Next(0, 10);
+                int b = r.Next(0, 10);
+                int c = r.Next(0, 10);
+                int pow = r.Next(0, 4);
+
+                Assert.AreEqual(Calc.DoOperation($"{a} + {b} * {c}"), (a + b * c).ToString());
+                Assert.AreEqual(Calc.DoOperation($"{a}*{b}^{pow}"), (a * Math.Pow(b, pow)).ToString());
+            }
         }
 
         [TestMethod]
         public void Brackets()
         {
-            Assert.AreEqual(Calc.DoOperation("(20 + 12) * 2"), "64");
-            Assert.AreEqual(Calc.DoOperation("(12,5 - 0,5) / 4"), "3");
+            for (int i = 0; i < 100; i++)
+            {
+                int a = r.Next(0, 100);
+                int b = r.Next(0, 100);
+                int c = r.Next(0, 100);
+
+                Assert.AreEqual(Calc.DoOperation($"({a} + {b}) * {c}"), ((a + b) * c).ToString());
+                Assert.AreEqual(Calc.DoOperation($"({a} - {b}) / {c}"), ((double)(a - b) / c).ToString());
+            }
+        }
+
+        [TestMethod]
+        public void Function()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                int a = r.Next(0, 100);
+                int b = r.Next(0, 100);
+                int c = r.Next(0, 100);
+                int d = r.Next(0, 100);
+
+                Assert.AreEqual(Calc.DoOperation($"cos({a}) + sin({b}) + tan({c}) + sqrt({d})"),
+                        (Math.Cos(a) + Math.Sin(b) + Math.Tan(c) + Math.Sqrt(d)).ToString());
+            }
+        }
+
+        [TestMethod]
+        public void Unary()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                int a = r.Next(0, 100);
+                int b = r.Next(0, 100);
+                Assert.AreEqual(Calc.DoOperation($"-{a} + {b}"), (-a + b).ToString());
+                Assert.AreEqual(Calc.DoOperation($"+{a} - (-{b})"), (+a - (-b)).ToString());
+            }
         }
     }
 }

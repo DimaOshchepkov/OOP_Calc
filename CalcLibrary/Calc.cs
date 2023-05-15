@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,39 +11,57 @@ namespace CalcLibrary
 {
     public static class Calc
     {
-        static Dictionary<string, int> precedence = new Dictionary<string, int>(){
-            { "(", 0 }, {")", 0 },
-            { "+", 1 }, {"-", 1 },
-            { "*", 2 },{ "/", 2 },
-            { "^", 3 }};
+        static int GetPrecedence(string op)
+        {
+            switch (op)
+            {
+                case "+":
+                case "-":
+                    return 1;
+                case "*":
+                case "/":
+                    return 2;
+                case "cos":
+                case "sin":
+                case "tan":
+                case "sqrt":
+                case "#-":
+                case "#+":
+                    return 3;
+                case "^":
+                    return 4;
+                default:
+                    return 0;
+            }
+        }
+
+        static bool IsOperator(string token)
+        {
+            return token == "+" || token == "-" || token == "*" ||
+                token == "/" || token == "^" || token == "#+" || token == "#-";
+        }
+
+        static bool IsUnaryOperator(string op)
+        {
+            return op == "+" || op == "-";
+        }
 
         static Dictionary<string, Func<double, double>> functions =
             new Dictionary<string, Func<double, double>>(){
             {"cos", Math.Cos }, {"sin", Math.Sin },
             {"tan", Math.Tan }, {"sqrt", Math.Sqrt } };
 
+        static string pattern = @"(\d+(\.|\,)\d+|\d+|cos|sin|tan|sqrt|\S)";
+
         static List<string> ToInfix(string expression)
         {
-            var infix = new List<string>();
-            string num = "";
-            foreach (var ch in expression)
+            
+            List<string> tokens = new List<string>();
+            foreach (Match match in Regex.Matches(expression, pattern))
             {
-                if (Char.IsDigit(ch) || ch == ',' || ch == '.')
-                    num += ch;
-                else
-                {
-                    if (num != "")
-                    {
-                        infix.Add(num);
-                        num = "";
-                    }
-                    if (ch != ' ')
-                        infix.Add(ch.ToString());
-                }
+                tokens.Add(match.Value);
             }
-            if (num != "")
-                infix.Add(num);
-            return infix;
+            return tokens;
         }
 
         static List<string> ToPostfix(List<string> infix)
@@ -50,8 +69,9 @@ namespace CalcLibrary
             var postfix = new List<string>();
             var operatorStack = new Stack<string>();
 
-            foreach (string token in infix)
+            for (int i = 0; i < infix.Count; i++)
             {
+                string token = infix[i];
                 if (double.TryParse(token, out double value))
                     postfix.Add(token);
                 else if (token == "(")
@@ -66,8 +86,21 @@ namespace CalcLibrary
                     operatorStack.Push(token);
                 else
                 {
+                    if (IsUnaryOperator(token))
+                    {
+                        // Проверяем, является ли предыдущий токен оператором или открывающей скобкой
+                        // Если да, то текущий оператор является унарным оператором
+                        bool isUnary = (i == 0 || IsOperator(infix[i - 1]) || infix[i - 1] == "(");
+
+                        if (isUnary)
+                        {
+                            // Преобразуем унарный оператор в бинарный для удобства обработки
+                            string unaryOperator = (token == "+") ? "#+" : "#-";
+                            token = unaryOperator;
+                        }
+                    }
                     while (operatorStack.Count != 0 &&
-                            precedence[operatorStack.Peek()] >= precedence[token])
+                            GetPrecedence(operatorStack.Peek()) >= GetPrecedence(token))
                         postfix.Add(operatorStack.Pop());
                     operatorStack.Push(token);
                 }
@@ -81,42 +114,58 @@ namespace CalcLibrary
 
         public static string DoOperation(string expression)
         {
-            Stack<string> stack = new Stack<string>();
             List<string> postfix = ToPostfix(ToInfix(expression));
+            Stack<double> operandStack = new Stack<double>();
+
             foreach (string token in postfix)
             {
-                if (double.TryParse(token, out double value))
-                    stack.Push(token);
-                else if (functions.ContainsKey(token))
-                {
-                    double arg = double.Parse(stack.Pop());
-                    double result = functions[token](arg);
-                    stack.Push(result.ToString());
-                }
+                if (double.TryParse(token, out double operand))
+                    operandStack.Push(operand);
                 else
                 {
-                    if (token == "^")
+                    switch (token)
                     {
-                        double exp = double.Parse(stack.Pop());
-                        double b = double.Parse(stack.Pop());
-                        stack.Push(Math.Pow(b, exp).ToString());
-                    }
-                    else
-                    {
-                        double b = double.Parse(stack.Pop());
-                        double a = double.Parse(stack.Pop());
-                        if (token == "+")
-                            stack.Push((a + b).ToString());
-                        else if (token == "-")
-                            stack.Push((a - b).ToString());
-                        else if (token == "*")
-                            stack.Push((a * b).ToString());
-                        else if (token == "/")
-                            stack.Push((a / b).ToString());
+                        case "+":
+                            operandStack.Push(operandStack.Pop() + operandStack.Pop());
+                            break;
+                        case "-":
+                            double subtrahend = operandStack.Pop();
+                            operandStack.Push(operandStack.Pop() - subtrahend);
+                            break;
+                        case "*":
+                            operandStack.Push(operandStack.Pop() * operandStack.Pop());
+                            break;
+                        case "/":
+                            double divisor = operandStack.Pop();
+                            operandStack.Push(operandStack.Pop() / divisor);
+                            break;
+                        case "^":
+                            double exponent = operandStack.Pop();
+                            operandStack.Push(Math.Pow(operandStack.Pop(), exponent));
+                            break;
+                        case "sin":
+                            operandStack.Push(Math.Sin(operandStack.Pop()));
+                            break;
+                        case "cos":
+                            operandStack.Push(Math.Cos(operandStack.Pop()));
+                            break;
+                        case "tan":
+                            operandStack.Push(Math.Tan(operandStack.Pop()));
+                            break;
+                        case "sqrt":
+                            operandStack.Push(Math.Sqrt(operandStack.Pop()));
+                            break;
+                        case "#-":
+                            operandStack.Push(-operandStack.Pop());
+                            break;
+                        case "#+":
+                            operandStack.Push(operandStack.Pop());
+                            break;
                     }
                 }
             }
-            return stack.Pop();
+
+            return operandStack.Pop().ToString();
         }
     }
 }
