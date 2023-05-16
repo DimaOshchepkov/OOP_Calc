@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CalcLibrary;
 
 namespace CalculatorGUI
 {
@@ -48,14 +49,10 @@ namespace CalculatorGUI
             TextBoxExpression.Text = ToExpression(infix);
         }
 
-        private void AddBinOp(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Add(object sender, RoutedEventArgs e)
         {
-            infix.Add((sender as Button).Content.ToString());
+            string buttonText = (sender as Button).Content.ToString();
+            infix.Add(buttonText);
             TextBoxExpression.Text = ToExpression(infix);
         }
 
@@ -67,36 +64,55 @@ namespace CalculatorGUI
 
         private void Calculate(object sender, RoutedEventArgs e)
         {
-
+            string token = Calc.DoOperation(TextBoxExpression.Text);
+            infix.Clear();
+            foreach (char ch in token)
+                infix.Add(ch.ToString());
+            TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void ChangeSign(object sender, RoutedEventArgs e)
         {
+            if (infix.Count == 0)
+                return;
+            else if (infix[0] == "-")
+                infix.RemoveAt(0);
+            else
+                infix.Insert(0, "-");
 
+            TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void AddPI(object sender, RoutedEventArgs e)
         {
-
+            infix.Add("3,14");
+            TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void CE(object sender, RoutedEventArgs e)
         {
             infix.Clear();
+            TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void AddComma(object sender, RoutedEventArgs e)
         {
-            if (infix.Count != 0 && infix[infix.Count - 1] == ",")
-                return;
+            if (infix.Count == 0 || !char.IsDigit(char.Parse(infix[infix.Count - 1])))
+                infix.Add("0");
 
-            infix.Add(",");
+            int i = infix.Count - 1;
+            while (i >= 0 && char.IsDigit(char.Parse(infix[i]))) 
+                i--;
+
+            if (i < 0 || infix[i] != ",")
+                infix.Add(",");
             TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void Reciprocal(object sender, RoutedEventArgs e)
         {
-            infix.Add("1/");
+            infix.Add("1");
+            infix.Add("/");
             TextBoxExpression.Text = ToExpression(infix);
         }
 

@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calc.cs" />
+    <Compile Include="Infix.cs" />
+    <Compile Include="Operation.cs" />
+    <Compile Include="Postfix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
