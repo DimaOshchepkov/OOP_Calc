@@ -15,7 +15,7 @@ namespace CalcLibrary
             else if ("*" == op || "/" == op || op == "%")
                 return 2;
             else if ("cos" == op || "sin" == op || "tan" == op || "sqrt" == op ||
-                    "#-" == op || "#+" == op )
+                    "#-" == op || "#+" == op || op == "exp" )
                 return 3;
             else if ("^" == op || "!" == op)
                 return 4;
@@ -37,7 +37,8 @@ namespace CalcLibrary
         static Dictionary<string, Func<double, double>> functions =
             new Dictionary<string, Func<double, double>>(){
             {"cos", Math.Cos }, {"sin", Math.Sin },
-            {"tan", Math.Tan }, {"sqrt", Math.Sqrt } };
+            {"tan", Math.Tan }, {"sqrt", Math.Sqrt },
+            {"exp", Math.Exp } };
 
         public List<string> ToPostfix(List<string> infix)
         {

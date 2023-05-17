@@ -52,6 +52,9 @@ namespace CalcLibrary
                         case "sin":
                             operandStack.Push(Math.Sin(operandStack.Pop()));
                             break;
+                        case "exp":
+                            operandStack.Push(Math.Exp(operandStack.Pop()));
+                            break;
                         case "cos":
                             operandStack.Push(Math.Cos(operandStack.Pop()));
                             break;
