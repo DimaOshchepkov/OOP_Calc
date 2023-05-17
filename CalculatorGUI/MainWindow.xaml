@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CalculatorGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="379">
+        Title="Калькулятор" Height="550" Width="379">
 
     <Grid>
         <Grid.RowDefinitions>
