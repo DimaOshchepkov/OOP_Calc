@@ -13,7 +13,6 @@ namespace CalcLibrary
 
         public List<string> ToInfix(string expression)
         {
-
             List<string> tokens = new List<string>();
             foreach (Match match in Regex.Matches(expression, pattern))
             {
