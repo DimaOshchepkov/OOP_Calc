@@ -22,6 +22,9 @@ namespace CalculatorGUI
     public partial class MainWindow : Window
     {
         List<string> infix = new List<string>();
+        int countOpenBrackets = 0;
+        int countClosedBrackets = 0;
+
         string ToExpression(List<string> infix)
         {
             StringBuilder sb = new StringBuilder();
@@ -36,7 +39,9 @@ namespace CalculatorGUI
 
         private void AddFunc(object sender, RoutedEventArgs e)
         {
-            infix.Add((sender as Button).Content.ToString() + "(");
+            countOpenBrackets++;
+            infix.Add((sender as Button).Content.ToString());
+            infix.Add("(");
             TextBoxExpression.Text = ToExpression(infix);
         }
 
@@ -45,6 +50,11 @@ namespace CalculatorGUI
             if (infix.Count == 0)
                 return;
 
+            if (infix[infix.Count - 1] == "(")
+                countOpenBrackets--;
+            else if (infix[infix.Count - 1] == ")")
+                countClosedBrackets--;
+
             infix.RemoveAt(infix.Count - 1);
             TextBoxExpression.Text = ToExpression(infix);
         }
@@ -52,7 +62,16 @@ namespace CalculatorGUI
         private void Add(object sender, RoutedEventArgs e)
         {
             string buttonText = (sender as Button).Content.ToString();
-            infix.Add(buttonText);
+            if (buttonText == "(")
+                countOpenBrackets++;
+            if (buttonText == ")" && countOpenBrackets > countClosedBrackets)
+            {
+                countClosedBrackets++;
+                infix.Add(buttonText);
+            }
+            else if (buttonText != ")")
+                infix.Add(buttonText);
+
             TextBoxExpression.Text = ToExpression(infix);
         }
 
@@ -64,11 +83,16 @@ namespace CalculatorGUI
 
         private void Calculate(object sender, RoutedEventArgs e)
         {
-            string token = Calc.DoOperation(TextBoxExpression.Text);
-            infix.Clear();
-            foreach (char ch in token)
-                infix.Add(ch.ToString());
-            TextBoxExpression.Text = ToExpression(infix);
+            try
+            {
+                string token = Calc.DoOperation(TextBoxExpression.Text);
+                TextBoxResult.Text = token;
+            }
+            catch
+            {
+                TextBoxResult.Text = "Неверный формат ввода";
+            }
+            
         }
 
         private void ChangeSign(object sender, RoutedEventArgs e)
@@ -121,6 +145,25 @@ namespace CalculatorGUI
         {
             if (infix.Count == 0)
                 TextBoxExpression.Text = "0";
+            TextBoxResult.Clear();
+        }
+
+        private void TextBoxResult_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void AddE(object sender, RoutedEventArgs e)
+        {
+            infix.Add("2,71");
+            TextBoxExpression.Text = ToExpression(infix);
+        }
+
+        private void AddSqr(object sender, RoutedEventArgs e)
+        {
+            infix.Add("^");
+            infix.Add("2");
+            TextBoxExpression.Text = ToExpression(infix);
         }
     }
 }

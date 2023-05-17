@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CalculatorGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="492" Width="379">
+        Title="MainWindow" Height="550" Width="379">
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -26,53 +27,73 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
+
+        <TextBox 
+            Name="TextBoxResult"
+            Grid.Column="0"
+            Grid.Row="1"
+            Grid.ColumnSpan="5"
+            TextWrapping="Wrap"
+            Text=""
+            TextAlignment="Right"
+            IsReadOnly="True" 
+            FontSize="24"
+            Margin="10,0,0,10"
+            TextChanged="TextBoxResult_TextChanged"
+         />
+        
         <TextBox 
             Name="TextBoxExpression"
             Grid.Column="0"
             Grid.Row="0"
             Grid.ColumnSpan="5"
-            Margin="10,19,10,10"
-            TextAlignment="Right" Text="0" TextChanged="TextBoxExpression_TextChanged"
+            Margin="10,10,0,0"
+            TextAlignment="Right"
+            Text="0"
+            TextChanged="TextBoxExpression_TextChanged"
+            IsReadOnly="True"
+            FontSize="24"
          />
-        <Button Click="Erase" Content="&lt;=" BorderThickness="4" Grid.Column="4" Grid.Row="1" FontSize="24"/>
-        <Button Click="Add" Content="mod" BorderThickness="4" Grid.Column="4" Grid.Row="2" FontSize="24"/>
-        <Button Click="Add" Content="/" BorderThickness="4" Grid.Column="4" Grid.Row="3" FontSize="24"/>
-        <Button Click="Add" Content="*" BorderThickness="4" Grid.Column="4" Grid.Row="4" FontSize="24"/>
-        <Button Click="Add"  Content="-" BorderThickness="4" Grid.Column="4" Grid.Row="5" FontSize="24"/>
-        <Button Click="Add" Content="+" BorderThickness="4" Grid.Column="4" Grid.Row="6" FontSize="24"/>
-        <Button Click="Calculate" Content="=" BorderThickness="4" Grid.Column="4" Grid.Row="7" FontSize="24"/>
 
-        <Button Content="" BorderThickness="4" Grid.Column="0" Grid.Row="1" FontSize="24"/>
+        <Button Click="Erase" Content="&lt;=" BorderThickness="4" Grid.Column="4" Grid.Row="2" FontSize="24" />
+        <Button Click="Add" Content="%" BorderThickness="4" Grid.Column="4" Grid.Row="3" FontSize="24"/>
+        <Button Click="Add" Content="/" BorderThickness="4" Grid.Column="4" Grid.Row="4" FontSize="24" />
+        <Button Click="Add" Content="*" BorderThickness="4" Grid.Column="4" Grid.Row="5" FontSize="24"/>
+        <Button Click="Add"  Content="-" BorderThickness="4" Grid.Column="4" Grid.Row="6" FontSize="24"/>
+        <Button Click="Add" Content="+" BorderThickness="4" Grid.Column="4" Grid.Row="7" FontSize="24"/>
+        <Button Click="Calculate" Content="=" BorderThickness="4" Grid.Column="4" Grid.Row="8" FontSize="24"/>
+
         <Button Content="" BorderThickness="4" Grid.Column="0" Grid.Row="2" FontSize="24"/>
-        <Button Click="AddFunc" Content="sqrt" BorderThickness="4" Grid.Column="0" Grid.Row="3" FontSize="24"/>
-        <Button Click="Add" Content="^" BorderThickness="4" Grid.Column="0" Grid.Row="4" FontSize="24"/>
-        <Button Content="" BorderThickness="4" Grid.Column="0" Grid.Row="5" FontSize="24"/>
-        <Button Content="" BorderThickness="4" Grid.Column="0" Grid.Row="6" FontSize="24"/>
-        <Button Content="" BorderThickness="4" Grid.Column="0" Grid.Row="7" FontSize="24"/>
+        <Button Content="tan" Click="AddFunc"  BorderThickness="4" Grid.Column="0" Grid.Row="3" FontSize="24"/>
+        <Button Click="AddFunc" Content="sqrt" BorderThickness="4" Grid.Column="0" Grid.Row="4" FontSize="24"/>
+        <Button Click="Add" Content="^" BorderThickness="4" Grid.Column="0" Grid.Row="5" FontSize="24"/>
+        <Button Content="x^2" Click="AddSqr" BorderThickness="4" Grid.Column="0" Grid.Row="6" FontSize="24"/>
+        <Button Content="sin" Click="AddFunc" BorderThickness="4" Grid.Column="0" Grid.Row="7" FontSize="24"/>
+        <Button Content="cos" Click="AddFunc" BorderThickness="4" Grid.Column="0" Grid.Row="8" FontSize="24"/>
 
-        <Button Click="AddPI" Content="pi" BorderThickness="4" Grid.Column="1" Grid.Row="1" FontSize="24"/>
-        <Button Click="Reciprocal" Content="1/x" BorderThickness="4" Grid.Column="1" Grid.Row="2" FontSize="24"/>
-        <Button Click="Add" Content="(" BorderThickness="4" Grid.Column="1" Grid.Row="3" FontSize="24"/>
-        <Button Click="Add" Content="7" BorderThickness="4" Grid.Column="1" Grid.Row="4" FontSize="24"/>
-        <Button Click="Add" Content="4" BorderThickness="4" Grid.Column="1" Grid.Row="5" FontSize="24"/>
-        <Button Click="Add" Content="1" BorderThickness="4" Grid.Column="1" Grid.Row="6" FontSize="24"/>
-        <Button Click="ChangeSign" Content="+/-" BorderThickness="4" Grid.Column="1" Grid.Row="7" FontSize="24"/>
+        <Button Click="AddPI" Content="pi" BorderThickness="4" Grid.Row="2" Grid.Column="1" FontSize="24"/>
+        <Button Click="Reciprocal" Content="1/x" BorderThickness="4" Grid.Row="3" Grid.Column="1" FontSize="24"/>
+        <Button Click="Add" Content="(" BorderThickness="4" Grid.Row="4" Grid.Column="1" FontSize="24"/>
+        <Button Click="Add" Content="7" BorderThickness="4" Grid.Row="5" Grid.Column="1" FontSize="24"/>
+        <Button Click="Add" Content="4" BorderThickness="4" Grid.Row="6" Grid.Column="1" FontSize="24"/>
+        <Button Click="Add" Content="1" BorderThickness="4" Grid.Row="7" Grid.Column="1" FontSize="24"/>
+        <Button Click="ChangeSign" Content="+/-" BorderThickness="4" Grid.Row="8" Grid.Column="1" FontSize="24"/>
 
-        <Button Content="" BorderThickness="4" Grid.Column="2" Grid.Row="1" FontSize="24"/>
-        <Button Content="" BorderThickness="4" Grid.Column="2" Grid.Row="2" FontSize="24"/>
-        <Button Click="Add" Content=")" BorderThickness="4" Grid.Column="2" Grid.Row="3" FontSize="24"/>
-        <Button Click="Add" Content="8" BorderThickness="4" Grid.Column="2" Grid.Row="4" FontSize="24"/>
-        <Button Click="Add" Content="5" BorderThickness="4" Grid.Column="2" Grid.Row="5" FontSize="24"/>
-        <Button Click="Add" Content="2" BorderThickness="4" Grid.Column="2" Grid.Row="6" FontSize="24"/>
-        <Button Click="Add" Content="0" BorderThickness="4" Grid.Column="2" Grid.Row="7" FontSize="24"/>
+        <Button Content="e" Click="AddE" BorderThickness="4" Grid.Column="2" Grid.Row="2" FontSize="24"/>
+        <Button Content="" BorderThickness="4" Grid.Column="2" Grid.Row="3" FontSize="24"/>
+        <Button Click="Add" Content=")" BorderThickness="4" Grid.Column="2" Grid.Row="4" FontSize="24"/>
+        <Button Click="Add" Content="8" BorderThickness="4" Grid.Column="2" Grid.Row="5" FontSize="24"/>
+        <Button Click="Add" Content="5" BorderThickness="4" Grid.Column="2" Grid.Row="6" FontSize="24"/>
+        <Button Click="Add" Content="2" BorderThickness="4" Grid.Column="2" Grid.Row="7" FontSize="24"/>
+        <Button Click="Add" Content="0" BorderThickness="4" Grid.Column="2" Grid.Row="8" FontSize="24"/>
 
-        <Button Click="CE" Content="CE" BorderThickness="4" Grid.Column="3" Grid.Row="1" FontSize="24"/>
-        <Button Click="AddFunc" Content="exp" BorderThickness="4" Grid.Column="3" Grid.Row="2" FontSize="24"/>
-        <Button Click="AddFact" Content="n!" BorderThickness="4" Grid.Column="3" Grid.Row="3" FontSize="24"/>
-        <Button Click="Add" Content="9" BorderThickness="4" Grid.Column="3" Grid.Row="4" FontSize="24"/>
-        <Button Click="Add" Content="6" BorderThickness="4" Grid.Column="3" Grid.Row="5" FontSize="24"/>
-        <Button Click="Add" Content="3" BorderThickness="4" Grid.Column="3" Grid.Row="6" FontSize="24"/>
-        <Button Click="AddComma" Content="," BorderThickness="4" Grid.Column="3" Grid.Row="7" FontSize="24"/>
+        <Button Click="CE" Content="CE" BorderThickness="4" Grid.Column="3" Grid.Row="2" FontSize="24" />
+        <Button Click="AddFunc" Content="exp" BorderThickness="4" Grid.Column="3" Grid.Row="3" FontSize="24" />
+        <Button Click="AddFact" Content="n!" BorderThickness="4" Grid.Column="3" Grid.Row="4" FontSize="24"/>
+        <Button Click="Add" Content="9" BorderThickness="4" Grid.Column="3" Grid.Row="5" FontSize="24"/>
+        <Button Click="Add" Content="6" BorderThickness="4" Grid.Column="3" Grid.Row="6" FontSize="24"/>
+        <Button Click="Add" Content="3" BorderThickness="4" Grid.Column="3" Grid.Row="7" FontSize="24" />
+        <Button Click="AddComma" Content="," BorderThickness="4" Grid.Column="3" Grid.Row="8" FontSize="24" />
 
     </Grid>
 </Window>

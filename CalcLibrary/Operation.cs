@@ -8,6 +8,13 @@ namespace CalcLibrary
 {
     class Operation
     {
+        static double Factorial(double n)
+        {
+            if (n <= 1)
+                return 1;
+            else
+                return n * Factorial(n - 1);
+        }
         public string DoCalc(List<string> postfix)
         {
             Stack<double> operandStack = new Stack<double>();
@@ -34,6 +41,10 @@ namespace CalcLibrary
                             double divisor = operandStack.Pop();
                             operandStack.Push(operandStack.Pop() / divisor);
                             break;
+                        case "%":
+                            double div = operandStack.Pop();
+                            operandStack.Push(operandStack.Pop() / div);
+                            break;
                         case "^":
                             double exponent = operandStack.Pop();
                             operandStack.Push(Math.Pow(operandStack.Pop(), exponent));
@@ -55,6 +66,9 @@ namespace CalcLibrary
                             break;
                         case "#+":
                             operandStack.Push(operandStack.Pop());
+                            break;
+                        case "!":
+                            operandStack.Push(Factorial(operandStack.Pop()));
                             break;
                     }
                 }

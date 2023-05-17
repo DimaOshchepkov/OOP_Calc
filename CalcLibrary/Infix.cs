@@ -9,7 +9,7 @@ namespace CalcLibrary
 {
     class Infix
     {
-        static string pattern = @"(\d+(\.|\,)\d+|\d+|cos|sin|tan|sqrt|\S)";
+        static string pattern = @"(\d+(\.|\,)\d+|\d+|cos|sin|tan|sqrt|!|%|\S)";
 
         public List<string> ToInfix(string expression)
         {

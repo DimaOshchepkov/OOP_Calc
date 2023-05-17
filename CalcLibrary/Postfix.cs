@@ -12,12 +12,12 @@ namespace CalcLibrary
         {
             if ("+" == op || "-" == op)
                 return 1;
-            else if ("*" == op || "/" == op)
+            else if ("*" == op || "/" == op || op == "%")
                 return 2;
             else if ("cos" == op || "sin" == op || "tan" == op || "sqrt" == op ||
-                    "#-" == op || "#+" == op)
+                    "#-" == op || "#+" == op )
                 return 3;
-            else if ("^" == op)
+            else if ("^" == op || "!" == op)
                 return 4;
             else
                 return 0;
@@ -26,7 +26,7 @@ namespace CalcLibrary
         static bool IsOperator(string token)
         {
             return token == "+" || token == "-" || token == "*" ||
-                token == "/" || token == "^" || token == "#+" || token == "#-";
+                token == "/" || token == "^" || token == "#+" || token == "#-" || token == "%";
         }
 
         static bool IsUnaryOperator(string op)
