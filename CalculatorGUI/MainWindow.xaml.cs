@@ -29,7 +29,7 @@ namespace CalculatorGUI
         /// <summary>
         /// Переводит список токенов в строку
         /// </summary>
-        /// <param name="infix">Сеписок токенов</param>
+        /// <param name="infix">Список токенов</param>
         /// <returns>Строка-выражение</returns>
         string ToExpression(List<string> infix)
         {
@@ -39,6 +39,11 @@ namespace CalculatorGUI
 
             return sb.ToString();
         }
+        /// <summary>
+        /// Переводит инфиксную записть в виде строки в список строк токенов
+        /// </summary>
+        /// <param name="expression">Выражение</param>
+        /// <returns>Выражение, разбитое на токены</returns>
         List<string> ToInfix(string expression)
         {
             List<string> infix = new List<string>();
@@ -51,7 +56,9 @@ namespace CalculatorGUI
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Добавляет выражение на кнопке в строку ввода вместе с открывающейся скобкой
+        /// </summary>
         private void AddFunc(object sender, RoutedEventArgs e)
         {
             string buttonText = (sender as Button).Content.ToString();
@@ -63,6 +70,10 @@ namespace CalculatorGUI
             infix.Add("(");
             TextBoxExpression.Text = ToExpression(infix);
         }
+
+        /// <summary>
+        /// Стирает один токен из ввода
+        /// </summary>
 
         private void Erase(object sender, RoutedEventArgs e)
         {
@@ -78,7 +89,10 @@ namespace CalculatorGUI
             TextBoxExpression.Text = ToExpression(infix);
         }
 
-        private void MoveTextToResult()
+        /// <summary>
+        /// Переносит посчитанное значение в строку ввода
+        /// </summary>
+        private void MoveTextToExpression()
         {
             if (isCalulate)
             {
@@ -90,11 +104,16 @@ namespace CalculatorGUI
             }
         }
    
+        /// <summary>
+        /// Добавляет операцию в строку ввода.
+        /// Переносит данные из строки вывода, если выражения было посчитано
+        /// </summary>
+
         private void Add(object sender, RoutedEventArgs e)
         {
             string buttonText = (sender as Button).Content.ToString();
 
-            MoveTextToResult();
+            MoveTextToExpression();
 
             switch(buttonText)
             {
@@ -115,14 +134,22 @@ namespace CalculatorGUI
             TextBoxExpression.Text = ToExpression(infix);
         }
 
+        /// <summary>
+        /// Добавляет факториал
+        /// </summary>
         private void AddFact(object sender, RoutedEventArgs e)
         {
-            MoveTextToResult();
+            MoveTextToExpression();
             if (infix.Count == 0)
                 infix.Add("0");
             infix.Add("!");
             TextBoxExpression.Text = ToExpression(infix);
         }
+
+        /// <summary>
+        /// Высчитывает выражение помещает ответ в TextBoxResult.
+        /// Если не удается посчитать выражение, то помещает в TextBoxResult "Неверный формат ввода"
+        /// </summary>
 
         private void Calculate(object sender, RoutedEventArgs e)
         {
@@ -140,13 +167,16 @@ namespace CalculatorGUI
             
         }
 
+        /// <summary>
+        /// Меняет первый знак выражения
+        /// </summary>
         private void ChangeSign(object sender, RoutedEventArgs e)
         {
-            MoveTextToResult();
+            MoveTextToExpression();
 
             if (infix.Count == 0)
                 return;
-            MoveTextToResult();
+            MoveTextToExpression();
             if (infix[0] == "-")
                 infix.RemoveAt(0);
             else
@@ -154,6 +184,11 @@ namespace CalculatorGUI
 
             TextBoxExpression.Text = ToExpression(infix);
         }
+
+        /// <summary>
+        /// Проверяет возможность добавить запятую в строку ввода
+        /// </summary>
+        /// <returns>true, если да, иначе false</returns>
         private bool PossibleAddComma()
         {
             if (infix.Count == 0 || !char.IsDigit(char.Parse(infix[infix.Count - 1])))
@@ -168,11 +203,14 @@ namespace CalculatorGUI
 
             return false;
         }
+        /// <summary>
+        /// Добавляет 3,14
+        /// </summary>
         private void AddPI(object sender, RoutedEventArgs e)
         {   
             if (PossibleAddComma() && IsPrevNotDigit() || infix.Count == 0)
             {
-                MoveTextToResult();
+                MoveTextToExpression();
                 infix.Add("3");
                 infix.Add(",");
                 infix.Add("1");
@@ -181,12 +219,18 @@ namespace CalculatorGUI
             TextBoxExpression.Text = ToExpression(infix);
         }
 
+        /// <summary>
+        /// Стирает весь ввод
+        /// </summary>
         private void CE(object sender, RoutedEventArgs e)
         {
             infix.Clear();
             TextBoxExpression.Text = ToExpression(infix);
         }
 
+        /// <summary>
+        /// Добавляет запятую
+        /// </summary>
         private void AddComma(object sender, RoutedEventArgs e)
         {
             if (infix.Count == 0)
@@ -197,6 +241,9 @@ namespace CalculatorGUI
             TextBoxExpression.Text = ToExpression(infix);
         }
 
+        /// <summary>
+        /// Высчитывает значение обратное введенному выражению
+        /// </summary>
         private void Reciprocal(object sender, RoutedEventArgs e)
         {
             //MoveTextToResult();
@@ -233,6 +280,7 @@ namespace CalculatorGUI
 
         }
 
+
         private bool IsPrevNotDigit()
         {
             if (infix.Count == 0)
@@ -244,12 +292,15 @@ namespace CalculatorGUI
             return true;
         }
 
+        /// <summary>
+        /// Добавляет 2,71
+        /// </summary>
         private void AddE(object sender, RoutedEventArgs e)
         {
             
             if (PossibleAddComma() && IsPrevNotDigit() || infix.Count == 0)
             {
-                MoveTextToResult();
+                MoveTextToExpression();
                 infix.Add("2");
                 infix.Add(",");
                 infix.Add("7");
@@ -258,9 +309,12 @@ namespace CalculatorGUI
             TextBoxExpression.Text = ToExpression(infix);
         }
 
+        /// <summary>
+        /// Высчитывает значение обатное введенному выражению
+        /// </summary>
         private void AddSqr(object sender, RoutedEventArgs e)
         {
-            MoveTextToResult();
+            MoveTextToExpression();
 
             try
             {
@@ -282,6 +336,9 @@ namespace CalculatorGUI
         {
 
         }
+        /// <summary>
+        /// Открывает меню побитовых операций
+        /// </summary>
         private void ButtonBin_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -289,13 +346,18 @@ namespace CalculatorGUI
             contextMenu.IsOpen = true;
         }
 
+        /// <summary>
+        /// Добавляет побитовую операцию
+        /// </summary>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
             infix.Add(menuItem.Header.ToString());
             TextBoxExpression.Text = ToExpression(infix);
         }
-
+        /// <summary>
+        /// Переводит значение TextBoxResult в заданную систему счисления
+        /// </summary>
         private void MenuItemToSys_Click(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
@@ -312,6 +374,9 @@ namespace CalculatorGUI
             TextBoxResult.Text = ConvertToSys.ConvertBaseWithFraction(TextBoxResult.Text, 10, targetBase);
         }
 
+        /// <summary>
+        /// Открывает меню перевода в другую систему счисления
+        /// </summary>
         private void ButtonSys_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -319,6 +384,9 @@ namespace CalculatorGUI
             contextMenu.IsOpen = true;
         }
 
+        /// <summary>
+        /// Считает значение выражения обратного введенному
+        /// </summary>
         private void AddSqrt(object sender, RoutedEventArgs e)
         {
             try
@@ -355,6 +423,9 @@ namespace CalculatorGUI
             }
         }
 
+        /// <summary>
+        /// Считает выражение обратное введенному
+        /// </summary>
         private void AddExp(object sender, RoutedEventArgs e)
         {
             try

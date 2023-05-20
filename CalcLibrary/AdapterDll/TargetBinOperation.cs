@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace CalcLibrary.AdapterDll
 {
-    internal class TargetBinOperation : ITargetBinOperaton
+    /// <summary>
+    /// Класс адаптирующий библиотеку BinOp.dll
+    /// </summary>
+    internal class TargetBinOperation : ITargetBinOperaton  
     {
         Type[] types;
         MethodInfo method;
@@ -19,6 +22,7 @@ namespace CalcLibrary.AdapterDll
 
             
         }
+
         public double Calc(double par1, double par2, string operation)
         {
             if (operation == "xor")
