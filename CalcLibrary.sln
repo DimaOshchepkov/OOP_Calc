@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorGUI", "Calculator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDLL", "TestDLL\TestDLL.csproj", "{56FBD54E-DF0F-4907-84C8-D25A939DD87D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConvert", "TestConvert\TestConvert.csproj", "{85CAE623-9410-4E4E-B362-9A7DCD1AFEA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{56FBD54E-DF0F-4907-84C8-D25A939DD87D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56FBD54E-DF0F-4907-84C8-D25A939DD87D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56FBD54E-DF0F-4907-84C8-D25A939DD87D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85CAE623-9410-4E4E-B362-9A7DCD1AFEA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85CAE623-9410-4E4E-B362-9A7DCD1AFEA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85CAE623-9410-4E4E-B362-9A7DCD1AFEA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85CAE623-9410-4E4E-B362-9A7DCD1AFEA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

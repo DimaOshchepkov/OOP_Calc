@@ -30,6 +30,7 @@ namespace CalculatorGUI
             StringBuilder sb = new StringBuilder();
             foreach (var str in infix)
                 sb.Append(str);
+
             return sb.ToString();
         }
         public MainWindow()
@@ -164,6 +165,47 @@ namespace CalculatorGUI
             infix.Add("^");
             infix.Add("2");
             TextBoxExpression.Text = ToExpression(infix);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void ButtonBin_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            ContextMenu contextMenu = button.ContextMenu;
+            contextMenu.IsOpen = true;
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = (MenuItem)sender;
+            infix.Add(menuItem.Header.ToString());
+            TextBoxExpression.Text = ToExpression(infix);
+        }
+
+        private void MenuItemToSys_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = (MenuItem)sender;
+            string op = menuItem.Header.ToString();
+            int targetBase = -1;
+            if (op == "bin")
+                targetBase = 2;
+            else if (op == "oct")
+                targetBase = 8;
+            else if (op == "hex")
+                targetBase = 16;
+
+            Calculate(sender, e);
+            TextBoxResult.Text = ConvertToSys.ConvertBaseWithFraction(TextBoxResult.Text, 10, targetBase);
+        }
+
+        private void ButtonSys_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            ContextMenu contextMenu = button.ContextMenu;
+            contextMenu.IsOpen = true;
         }
     }
 }

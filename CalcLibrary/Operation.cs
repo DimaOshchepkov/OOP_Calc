@@ -1,13 +1,17 @@
-﻿using System;
+﻿using CalcLibrary.AdapterDll;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace CalcLibrary
 {
     class Operation
     {
+        TargetBinOperation BinOp = new TargetBinOperation();
+
         static double Factorial(double n)
         {
             if (n <= 1)
@@ -15,6 +19,7 @@ namespace CalcLibrary
             else
                 return n * Factorial(n - 1);
         }
+
         public string DoCalc(List<string> postfix)
         {
             Stack<double> operandStack = new Stack<double>();
@@ -48,6 +53,12 @@ namespace CalcLibrary
                         case "^":
                             double exponent = operandStack.Pop();
                             operandStack.Push(Math.Pow(operandStack.Pop(), exponent));
+                            break;
+                        case "xor":
+                            operandStack.Push(BinOp.Calc(operandStack.Pop(), operandStack.Pop(), token));
+                            break;
+                        case "or":
+                            operandStack.Push(BinOp.Calc(operandStack.Pop(), operandStack.Pop(), token));
                             break;
                         case "sin":
                             operandStack.Push(Math.Sin(operandStack.Pop()));

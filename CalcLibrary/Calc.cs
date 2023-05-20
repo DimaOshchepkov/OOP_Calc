@@ -25,5 +25,16 @@ namespace CalcLibrary
 
             return op.DoCalc(postfix);
         }
+        static double ToAnother(double doubleNumber, int toBase)
+        {
+            long doubleBits = BitConverter.DoubleToInt64Bits(doubleNumber);
+            string binaryString = Convert.ToString(doubleBits, toBase);
+
+            // Insert the decimal point at the appropriate position
+            int decimalIndex = binaryString.Length - 52; // Assuming a double precision number
+            binaryString = binaryString.Insert(decimalIndex, ",");
+
+            return double.Parse(binaryString);
+        }
     }
 }
