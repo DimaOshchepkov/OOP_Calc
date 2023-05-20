@@ -6,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace CalcLibrary
 {
+    /// <summary>
+    /// Класс предназначен для перевода инфиксной записи в постфиксную
+    /// </summary>
     class Postfix
     {
+        /// <summary>
+        /// Вспомогательная функция для  определения приоритета операции op
+        /// </summary>
+        /// <param name="op">операция или функция</param>
+        /// <returns> возвращает приоритет операции</returns>
         static int GetPrecedence(string op)
         {
             if ("+" == op || "-" == op)
@@ -24,23 +32,42 @@ namespace CalcLibrary
                 return 0;
         }
 
+        /// <summary>
+        /// Определяет является ли токен операцией
+        /// </summary>
+        /// <param name="token"> предполагаемая операция</param>
+        /// <returns>true, если операция, иначе false</returns>
         static bool IsOperator(string token)
         {
             return token == "+" || token == "-" || token == "*" || token == "xor" || token == "or" ||
                 token == "/" || token == "^" || token == "#+" || token == "#-" || token == "%";
         }
 
+        /// <summary>
+        /// Опеределяет есть ли возможность у данного оператора быть унарным
+        /// </summary>
+        /// <param name="op">оператор</param>
+        /// <returns>true, если есть возможность быть унарным оператором, иначе false</returns>
         static bool IsUnaryOperator(string op)
         {
             return op == "+" || op == "-";
         }
 
+        /// <summary>
+        /// список функций
+        /// </summary>
+        /// <TODO>Это поле избыточно, нужно реструкторизовать программу</TODO>
         static Dictionary<string, Func<double, double>> functions =
             new Dictionary<string, Func<double, double>>(){
             {"cos", Math.Cos }, {"sin", Math.Sin },
             {"tan", Math.Tan }, {"sqrt", Math.Sqrt },
-            {"exp", Math.Exp } };
+            {"exp", Math.Exp } }; 
 
+        /// <summary>
+        /// Переводит постфиксную запись в инфиксную
+        /// </summary>
+        /// <param name="infix"> инфиксное представление выражения</param>
+        /// <returns>Постфиксное представление</returns>
         public List<string> ToPostfix(List<string> infix)
         {
             var postfix = new List<string>();

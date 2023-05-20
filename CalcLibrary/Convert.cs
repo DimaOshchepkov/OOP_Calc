@@ -6,9 +6,19 @@ using System.Threading.Tasks;
 
 namespace CalcLibrary
 {
+    /// <summary>
+    /// Класс для перевода из одной системы счисления в другую
+    /// </summary>
     public static class ConvertToSys
     {
-
+        /// <summary>
+        /// Переводит число number с плавающей точкой (или без нее) в системе числения sourceBase
+        /// в систему счисления targetBase
+        /// </summary>
+        /// <param name="number">Заданное число</param>
+        /// <param name="sourceBase">Исходная системы счисления</param>
+        /// <param name="targetBase">Целевая система счисления</param>
+        /// <returns>Число в targetBase системе счисления</returns>
         static public string ConvertBaseWithFraction(string number, int sourceBase, int targetBase)
         {
             string[] parts = number.Split(',');
@@ -40,6 +50,12 @@ namespace CalcLibrary
             return convertedNumber;
         }
 
+        /// <summary>
+        /// Переводит число в десятичную систему счисления
+        /// </summary>
+        /// <param name="number">Исходное число</param>
+        /// <param name="sourceBase">Исходная система счисления</param>
+        /// <returns>Число number в десятичной системе счисления</returns>
         static int ConvertToDecimal(string number, int sourceBase)
         {
             int decimalNumber = 0;
@@ -58,6 +74,12 @@ namespace CalcLibrary
             return decimalNumber;
         }
 
+        /// <summary>
+        /// Переводит число из десятичной системы счисления в целевую
+        /// </summary>
+        /// <param name="decimalNumber">Десятичное число</param>
+        /// <param name="targetBase">Целевая система счисления</param>
+        /// <returns>Число в целевой системе счисления</returns>
         static string ConvertFromDecimal(int decimalNumber, int targetBase)
         {
             string convertedNumber = "";
@@ -80,6 +102,17 @@ namespace CalcLibrary
             return convertedNumber;
         }
 
+        /// <summary>
+        /// Переводит дробную часть числа из десятичной системы счисления в 
+        /// целевую систему счисления
+        /// </summary>
+        /// <param name="fractionalPart"></param>
+        /// <param name="sourceBase"> ИСПРАВИТЬ</param>
+        /// <param name="targetBase"></param>
+        /// <TODO>
+        /// Добавить возможность задавать исходную систему счисления
+        /// </TODO>
+        /// <returns>Дробная часть числа в целевой системе счисления</returns>
         static string ConvertFractionalPart(string fractionalPart, int sourceBase, int targetBase)
         {
             double fraction = double.Parse("0," + fractionalPart);

@@ -24,7 +24,13 @@ namespace CalculatorGUI
         List<string> infix = new List<string>();
         int countOpenBrackets = 0;
         int countClosedBrackets = 0;
+        bool isCalulate = false;
 
+        /// <summary>
+        /// Переводит список токенов в строку
+        /// </summary>
+        /// <param name="infix">Сеписок токенов</param>
+        /// <returns>Строка-выражение</returns>
         string ToExpression(List<string> infix)
         {
             StringBuilder sb = new StringBuilder();
@@ -33,6 +39,14 @@ namespace CalculatorGUI
 
             return sb.ToString();
         }
+        List<string> ToInfix(string expression)
+        {
+            List<string> infix = new List<string>();
+            foreach (char ch in expression)
+                infix.Add(ch.ToString());
+
+            return infix;
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -40,8 +54,12 @@ namespace CalculatorGUI
 
         private void AddFunc(object sender, RoutedEventArgs e)
         {
+            string buttonText = (sender as Button).Content.ToString();
+            if (!IsPrevNotDigit() && infix.Count != 0)
+                return;
+
             countOpenBrackets++;
-            infix.Add((sender as Button).Content.ToString());
+            infix.Add(buttonText);
             infix.Add("(");
             TextBoxExpression.Text = ToExpression(infix);
         }
@@ -63,21 +81,30 @@ namespace CalculatorGUI
         private void Add(object sender, RoutedEventArgs e)
         {
             string buttonText = (sender as Button).Content.ToString();
-            if (buttonText == "(")
-                countOpenBrackets++;
-            if (buttonText == ")" && countOpenBrackets > countClosedBrackets)
+
+            switch(buttonText)
             {
-                countClosedBrackets++;
-                infix.Add(buttonText);
+                case "+":
+                case "-":
+                case "/":
+                case "*":
+                    if (infix.Count == 0)
+                        infix.Add("0");
+
+                    infix.Add(buttonText);
+                    break;
+                default:
+                    infix.Add(buttonText);
+                    break;
             }
-            else if (buttonText != ")")
-                infix.Add(buttonText);
 
             TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void AddFact(object sender, RoutedEventArgs e)
         {
+            if (infix.Count == 0)
+                infix.Add("0");
             infix.Add("!");
             TextBoxExpression.Text = ToExpression(infix);
         }
@@ -88,9 +115,11 @@ namespace CalculatorGUI
             {
                 string token = Calc.DoOperation(TextBoxExpression.Text);
                 TextBoxResult.Text = token;
+                isCalulate = true;
             }
-            catch
+            catch (Exception ex)
             {
+                isCalulate = false;
                 TextBoxResult.Text = "Неверный формат ввода";
             }
             
@@ -98,6 +127,9 @@ namespace CalculatorGUI
 
         private void ChangeSign(object sender, RoutedEventArgs e)
         {
+            if (isCalulate)
+                infix = ToInfix(TextBoxResult.Text);
+ 
             if (infix.Count == 0)
                 return;
             else if (infix[0] == "-")
@@ -107,10 +139,29 @@ namespace CalculatorGUI
 
             TextBoxExpression.Text = ToExpression(infix);
         }
+        private bool PossibleAddComma()
+        {
+            if (infix.Count == 0 || !char.IsDigit(char.Parse(infix[infix.Count - 1])))
+                return true;
 
+            int i = infix.Count - 1;
+            while (i >= 0 && char.IsDigit(char.Parse(infix[i])))
+                i--;
+
+            if (i < 0 || infix[i] != ",")
+                return true;
+
+            return false;
+        }
         private void AddPI(object sender, RoutedEventArgs e)
         {
-            infix.Add("3,14");
+            if (PossibleAddComma() && IsPrevNotDigit() || infix.Count == 0)
+            {
+                infix.Add("3");
+                infix.Add(",");
+                infix.Add("1");
+                infix.Add("4");
+            }
             TextBoxExpression.Text = ToExpression(infix);
         }
 
@@ -122,23 +173,31 @@ namespace CalculatorGUI
 
         private void AddComma(object sender, RoutedEventArgs e)
         {
-            if (infix.Count == 0 || !char.IsDigit(char.Parse(infix[infix.Count - 1])))
+            if (infix.Count == 0)
                 infix.Add("0");
 
-            int i = infix.Count - 1;
-            while (i >= 0 && char.IsDigit(char.Parse(infix[i]))) 
-                i--;
-
-            if (i < 0 || infix[i] != ",")
+            if (PossibleAddComma())
                 infix.Add(",");
             TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void Reciprocal(object sender, RoutedEventArgs e)
         {
-            infix.Add("1");
-            infix.Add("/");
-            TextBoxExpression.Text = ToExpression(infix);
+            try
+            {
+                string token = Calc.DoOperation(TextBoxExpression.Text);
+                infix.Clear();
+                infix.Add("1");
+                infix.Add("/");
+                infix.Add("(");
+                infix.Add(token);
+                infix.Add(")");
+                TextBoxExpression.Text = ToExpression(infix);
+            }
+            catch (Exception ex)
+            {
+                TextBoxResult.Text = "Неверный формат ввода";
+            }
         }
 
 
@@ -146,6 +205,9 @@ namespace CalculatorGUI
         {
             if (infix.Count == 0)
                 TextBoxExpression.Text = "0";
+
+            isCalulate = false;
+
             TextBoxResult.Clear();
         }
 
@@ -154,17 +216,46 @@ namespace CalculatorGUI
 
         }
 
+        private bool IsPrevNotDigit()
+        {
+            if (infix.Count == 0)
+                return false;
+
+            if (double.TryParse(infix[infix.Count - 1], out double _))
+                return false;
+
+            return true;
+        }
+
         private void AddE(object sender, RoutedEventArgs e)
         {
-            infix.Add("2,71");
+            if (PossibleAddComma() && IsPrevNotDigit() || infix.Count == 0)
+            {
+                infix.Add("2");
+                infix.Add(",");
+                infix.Add("7");
+                infix.Add("1");
+            }
             TextBoxExpression.Text = ToExpression(infix);
         }
 
         private void AddSqr(object sender, RoutedEventArgs e)
         {
-            infix.Add("^");
-            infix.Add("2");
-            TextBoxExpression.Text = ToExpression(infix);
+
+            try
+            {
+                string token = Calc.DoOperation(TextBoxExpression.Text);
+                infix.Clear();
+                infix.Add(token);
+                infix.Add("^");
+                infix.Add("2");
+                TextBoxExpression.Text = ToExpression(infix);
+            }
+            catch (Exception ex)
+            {
+                TextBoxResult.Text = "Неверный формат ввода";
+            }
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -206,6 +297,41 @@ namespace CalculatorGUI
             Button button = (Button)sender;
             ContextMenu contextMenu = button.ContextMenu;
             contextMenu.IsOpen = true;
+        }
+
+        private void AddSqrt(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string token = Calc.DoOperation(TextBoxExpression.Text);
+                infix.Clear();
+                infix.Add("sqrt");
+                infix.Add("(");
+                infix.Add(token);
+                infix.Add(")");
+            }
+            catch (Exception ex)
+            {
+                TextBoxResult.Text = "Неверный формат ввода";
+            }
+            
+        }
+
+        private void AddOpenBracker(object sender, RoutedEventArgs e)
+        {
+            string buttonText = (sender as Button).Content.ToString();
+            countOpenBrackets++;
+            infix.Add(buttonText);
+        }
+
+        private void AddClosedBracket(object sender, RoutedEventArgs e)
+        {
+            string buttonText = (sender as Button).Content.ToString();
+            if (countOpenBrackets > countClosedBrackets)
+            {
+                countClosedBrackets++;
+                infix.Add(buttonText);
+            }
         }
     }
 }

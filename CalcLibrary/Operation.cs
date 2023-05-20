@@ -8,18 +8,44 @@ using System.Threading.Tasks;
 
 namespace CalcLibrary
 {
+    /// <summary>
+    /// Класс для высчитывания выражения в постфикной форме
+    /// </summary>
     class Operation
     {
+        /// <summary>
+        /// Адаптер для библиотеки BinCalc.dll
+        /// </summary>
         TargetBinOperation BinOp = new TargetBinOperation();
 
+        /// <summary>
+        /// Функция для подсчета факториала
+        /// </summary>
+        /// <param name="n"> Число</param>
+        /// <returns>Факториал числа</returns>
         static double Factorial(double n)
         {
+            if (n < 0)
+                throw new ArgumentException();
+
+            if ((int)n != n)
+            {
+                double log = Math.Log(Factorial((int)n)) +
+                              (n - (int)n) * Math.Log((int)n + 1);
+                return Math.Exp(log);
+            }
+
             if (n <= 1)
                 return 1;
             else
                 return n * Factorial(n - 1);
         }
 
+        /// <summary>
+        /// Произовит вычисление с постфиксной записью выражения
+        /// </summary>
+        /// <param name="postfix">постфиксная запись выражения</param>
+        /// <returns>Значение выражения</returns>
         public string DoCalc(List<string> postfix)
         {
             Stack<double> operandStack = new Stack<double>();
@@ -48,7 +74,10 @@ namespace CalcLibrary
                             break;
                         case "%":
                             double div = operandStack.Pop();
-                            operandStack.Push(operandStack.Pop() / div);
+                            double res = operandStack.Pop() % div;
+                            if (res < 0)
+                                res += div;
+                            operandStack.Push(res);
                             break;
                         case "^":
                             double exponent = operandStack.Pop();
