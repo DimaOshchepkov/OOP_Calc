@@ -82,7 +82,7 @@
 
         <Button Click="AddPI" Content="pi" BorderThickness="4" Grid.Row="2" Grid.Column="1" FontSize="24"/>
         <Button Click="Reciprocal" Content="1/x" BorderThickness="4" Grid.Row="3" Grid.Column="1" FontSize="24"/>
-        <Button Click="AddOpenBracker" Content="(" BorderThickness="4" Grid.Row="4" Grid.Column="1" FontSize="24"/>
+        <Button Click="AddOpenBracket" Content="(" BorderThickness="4" Grid.Row="4" Grid.Column="1" FontSize="24"/>
         <Button Click="Add" Content="7" BorderThickness="4" Grid.Row="5" Grid.Column="1" FontSize="24"/>
         <Button Click="Add" Content="4" BorderThickness="4" Grid.Row="6" Grid.Column="1" FontSize="24"/>
         <Button Click="Add" Content="1" BorderThickness="4" Grid.Row="7" Grid.Column="1" FontSize="24"/>
